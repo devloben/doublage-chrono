@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chrono Manuel</title>
+    <meta
+      name="description"
+      content="Outil au format PWA qui propose une solution de chronomètrage manuel pour smartphone."
+    />
+    <meta name="author" content="WebDevArt" />
+    <meta name="theme-color" content="#333333" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="manifest" href="chronomanuel.webmanifest" />
+
+    <!-- Icones -->
+    <!-- Favicons pour navigateurs -->
+    <link rel="icon" type="image/x-icon" href="ressources/icons/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="ressources/icons/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="ressources/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="ressources/icons/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="256x256"
+      href="ressources/icons/favicon-256x256.png"
+    />
+
+    <!-- Icones Apple IOS -->
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="ressources/icons/apple-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="ressources/icons/apple-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="ressources/icons/apple-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="ressources/icons/apple-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="ressources/icons/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="ressources/icons/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="ressources/icons/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="ressources/icons/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="ressources/icons/apple-icon-180x180.png"
+    />
+
+    <!-- Icones Microsoft (Edge, IE) -->
+    <meta name="msapplication-TileColor" content="#f1f1f1" />
+    <meta
+      name="msapplication-square70x70logo"
+      content="ressources/icons/ms-icon-70x70.png"
+    />
+    <meta
+      name="msapplication-TileImage"
+      content="ressources/icons/ms-icon-144x144.png"
+    />
+    <meta
+      name="msapplication-square150x150logo"
+      content="ressources/icons/ms-icon-150x150.png"
+    />
+    <meta
+      name="msapplication-square310x310logo"
+      content="ressources/icons/ms-icon-310x310.png"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Chrono Manuel" />
+    <meta
+      property="og:description"
+      content="Outil au format PWA qui propose une solution de chronomètrage manuel pour smartphone."
+    />
+    <meta property="og:url" content="https://webdevart.fr/dev/chronomanuel" />
+    <meta
+      property="og:image"
+      content="ressources/icons/android-icon-512x512.png"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chrono Manuel" />
+    <meta property="og:locale" content="fr_FR" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="btn-container">
+        <div class="lock">
+          <label for="verrouillage">Verrouillage</label>
+          <input type="checkbox" id="verrouillage" />
+        </div>
+
+        <div id="temps">00:00:00.00</div>
+
+        <button id="start">Start</button>
+
+        <div class="stop-reset">
+          <button id="stop">Stop</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+
+      <ul id="temps-enregistres"></ul>
+
+      <button id="enregistrer">Lap</button>
+
+      <div id="appVersion"></div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="main.js"></script>
+  </body>
+</html>
