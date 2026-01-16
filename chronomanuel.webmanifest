@@ -1,7 +1,7 @@
 {
  "name": "Chrono-Manuel - PWA",
  "short_name": "Chrono-Manuel",
- "description": "Outil au format PWA qui propose une solution de chronomètrage manuel pour smartphone.",
+ "description": "Outil au format PWA qui propose une solution doublage de chronomètrage manuel pour smartphone.",
  "lang": "fr",
  "start_url": "index.html",
  "display": "fullscreen",

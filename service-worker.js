@@ -1,16 +1,16 @@
 // Définis le nom de ton cache
-const version = "v0.1";
+const version = "v0.2";
 const cacheName = `CM-cache-${version}`;
 
 // Liste des fichiers à mettre en cache
 const filesToCache = [
-  "/edw/chrono-manuel/",
-  "/edw/chrono-manuel/index.html",
-  "/edw/chrono-manuel/manifest.json",
-  "/edw/chrono-manuel/styles.css",
-  "/edw/chrono-manuel/main.js",
-  "/edw/chrono-manuel/images/icon-192x192.png",
-  "/edw/chrono-manuel/images/icon-512x512.png",
+  "/dev/chrono-manuel/",
+  "/dev/chrono-manuel/index.html",
+  "/dev/chrono-manuel/manifest.json",
+  "/dev/chrono-manuel/styles.css",
+  "/dev/chrono-manuel/main.js",
+  "/dev/chrono-manuel/images/icon-192x192.png",
+  "/dev/chrono-manuel/images/icon-512x512.png",
   // Ajoute d'autres fichiers statiques ici (CSS, JS, images, etc.)
 ];
 

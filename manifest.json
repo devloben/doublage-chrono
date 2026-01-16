@@ -1,18 +1,18 @@
 {
   "name": "Chrono Manuel",
   "short_name": "CM",
-  "start_url": "/edw/chrono-manuel/",
+  "start_url": "/dev/chrono-manuel/",
   "display": "standalone",
   "background_color": "#333333",
   "theme_color": "#333333",
   "icons": [
     {
-      "src": "/edw/chrono-manuel/images/icon-192x192.png",
+      "src": "/dev/chrono-manuel/images/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/edw/chrono-manuelimages/icon-512x512.png",
+      "src": "/dev/chrono-manuelimages/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
