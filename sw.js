@@ -1,9 +1,9 @@
-// Files to cache
-const cacheName = "chronomanuel-0.2";
-const appShellFiles = [
+const CACHE_NAME = "doublageChrono-v0.3";
+const APP_SHELL_FILES = [
+  "./",
   "index.html",
-  "main.js",
   "styles.css",
+  "main.js",
   "chronomanuel.webmanifest",
   "ressources/icons/favicon.ico",
   "ressources/icons/favicon-16x16.png",
@@ -30,59 +30,49 @@ const appShellFiles = [
   "ressources/icons/android-icon-144x144.png",
   "ressources/icons/android-icon-192x192.png",
   "ressources/icons/android-icon-512x512.png",
+  "ressources/img/screenshot.png",
 ];
 
-// Installing Service Worker
-self.addEventListener("install", (e) => {
-  console.log("[Service Worker] Install");
-  e.waitUntil(
-    (async () => {
-      const cache = await caches.open(cacheName);
-      console.log("[Service Worker] Caching all: app shell and content");
-      await cache.addAll(appShellFiles);
-    })()
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL_FILES)),
   );
+  self.skipWaiting();
 });
 
-// Fetching content using Service Worker
-self.addEventListener("fetch", (e) => {
-  // Cache http and https only, skip unsupported chrome-extension:// and file://...
-  if (
-    !(e.request.url.startsWith("http:") || e.request.url.startsWith("https:"))
-  ) {
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        }),
+      ),
+    ),
+  );
+  self.clients.claim();
+});
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") {
     return;
   }
 
-  e.respondWith(
-    (async () => {
-      const r = await caches.match(e.request);
-      console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
-      if (r) return r;
-      const response = await fetch(e.request);
-      const cache = await caches.open(cacheName);
-      console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
-      cache.put(e.request, response.clone());
-      return response;
-    })()
-  );
-});
+  const url = new URL(event.request.url);
 
-// Empty cache
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          if (key === cacheName) {
-            console.log(
-              `Cache ${key} est le cache actuel, aucun besoin de le supprimer.`
-            );
-            return;
-          }
-          console.log(`Suppression de l'ancien cache: ${key}`);
-          return caches.delete(key);
-        })
-      );
-    })
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request);
+    }),
   );
 });

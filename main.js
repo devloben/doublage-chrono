@@ -8,9 +8,6 @@ if ("serviceWorker" in navigator && !isLocalhost) {
     console.log("Service Worker enregistré");
   });
 }
-//Affiche de la version
-const appVersion = "v-0.2";
-//document.getElementById("appVersion").innerText = appVersion;
 
 function hasDataToProtect() {
   return hasStarted || savedTimes.length > 0;
