@@ -37,10 +37,8 @@ body {
 .lock label {
   color: white;
 }
-.lock input {
-}
 
-#temps {
+#time {
   color: white;
   font-size: 2em;
   letter-spacing: 4px;
@@ -72,7 +70,7 @@ body {
   border: 1px solid gray;
 }
 
-#temps-enregistres {
+#saved-times-list {
   border: 1px solid gray;
   border-radius: 5px;
   min-height: 50px;
@@ -86,17 +84,17 @@ body {
   padding-right: 20px;
   flex: auto;
 }
-#temps-enregistres li {
+#saved-times-list li {
   font-size: 24px;
   line-height: 30px;
   letter-spacing: 2px;
 }
-#temps-enregistres li:first-child {
+#saved-times-list li:first-child {
   font-size: 26px;
   font-weight: bold;
 }
 
-#enregistrer {
+#lap {
   background: crimson;
   min-height: 100px;
   width: 100%;

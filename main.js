@@ -1,151 +1,162 @@
-// Enregistrer le Service Worker
-if ("serviceWorker" in navigator) {
+// Enregistre le Service Worker
+const isLocalhost =
+  window.location.hostname === "127.0.0.1" ||
+  window.location.hostname === "localhost";
+
+if ("serviceWorker" in navigator && !isLocalhost) {
   navigator.serviceWorker.register("sw.js").then(() => {
     console.log("Service Worker enregistré");
   });
 }
-//Affichage de la version
+//Affiche de la version
 const appVersion = "v-0.2";
-document.getElementById("appVersion").innerText = appVersion;
+//document.getElementById("appVersion").innerText = appVersion;
 
-window.addEventListener("beforeunload", (event) => {
-  // Annuler le rechargement de la page
-  event.preventDefault();
-});
+// window.addEventListener("beforeunload", (event) => {
+//   // Annuler le rechargement de la page
+//   event.preventDefault();
+// });
 
 let timer; // Variable pour stocker l'identifiant du setInterval
-
-let heures = 0;
+let hours = 0;
 let minutes = 0;
-let secondes = 0;
-let dixiemes = 0;
+let seconds = 0;
+let tenths = 0;
 
-let tempsEnregistres = []; // Tableau pour stocker les temps enregistrés
+let savedTimes = [];
 
-function afficherTemps() {
-  document.getElementById("temps").textContent = `${heures
+const lockCheckbox = document.getElementById("lock");
+const startButton = document.getElementById("start");
+const stopButton = document.getElementById("stop");
+const resetButton = document.getElementById("reset");
+const lapButton = document.getElementById("lap");
+
+lockCheckbox.checked = false;
+startButton.disabled = false;
+stopButton.disabled = true;
+resetButton.disabled = true;
+lapButton.disabled = true;
+
+function renderTime() {
+  document.getElementById("time").textContent = `${hours
     .toString()
-    .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secondes
+    .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
     .toString()
-    .padStart(2, "0")}.${dixiemes.toString().padStart(2, "0")}`;
+    .padStart(2, "0")}.${tenths.toString().padStart(2, "0")}`;
 }
 
-function demarrerChronometre() {
+function startTimer() {
   // Vérifie si le chronomètre est déjà en cours d'exécution
   if (!timer) {
     timer = setInterval(function () {
-      dixiemes++;
-      if (dixiemes === 100) {
-        dixiemes = 0;
-        secondes++;
-        if (secondes === 60) {
-          secondes = 0;
+      tenths++;
+      if (tenths === 100) {
+        tenths = 0;
+        seconds++;
+        if (seconds === 60) {
+          seconds = 0;
           minutes++;
           if (minutes === 60) {
             minutes = 0;
-            heures++;
+            hours++;
           }
         }
       }
-      afficherTemps();
+      renderTime();
     }, 10);
-    // Désactiver le bouton de réinitialisation
-    document.getElementById("reset").disabled = true;
-    document.getElementById("start").disabled = true; // Désactiver le bouton "Démarrer"
+
+    // Active la fonction lock et le bouton Lap
+    lockCheckbox.checked = true;
+    applyLockState();
+    lapButton.disabled = false;
   }
 }
 
-function arreterChronometre() {
+function stopTimer() {
   clearInterval(timer);
-  // Activer à nouveau le bouton de réinitialisation
-  document.getElementById("reset").disabled = false;
+
+  resetButton.disabled = false;
+  stopButton.disabled = true;
 }
 
-function reinitialiserChronometre() {
+function resetTimer() {
   clearInterval(timer);
   timer = null;
-  heures = 0;
+  hours = 0;
   minutes = 0;
-  secondes = 0;
-  dixiemes = 0;
-  afficherTemps();
-  document.getElementById("reset").disabled = true;
+  seconds = 0;
+  tenths = 0;
+  renderTime();
 
-  // Réinitialiser la liste de temps enregistrés
-  tempsEnregistres = [];
-  afficherTempsEnregistres(); // Mettre à jour l'affichage
+  resetButton.disabled = true;
+  stopButton.disabled = true;
 
-  effacerLocalStorage(); // Effacer les temps enregistrés dans le localStorage
+  savedTimes = [];
+  renderSavedTimes(); 
+  clearSavedTimesStorage(); 
 
-  // Activer le bouton "Démarrer"
-  document.getElementById("start").disabled = false;
+  startButton.disabled = false;
+  lockCheckbox.disabled = false;
 }
 
-function enregistrerTemps() {
-  const tempsActuel = `${heures.toString().padStart(2, "0")}:${minutes
+function addSavedTime() {
+  const currentTime = `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
-    .padStart(2, "0")}:${secondes.toString().padStart(2, "0")}.${dixiemes
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${tenths
     .toString()
     .padStart(2, "0")}`;
-  tempsEnregistres.push(tempsActuel);
-  afficherTempsEnregistres();
-  sauvegarderTempsEnregistres(); // Sauvegarder les temps enregistrés
+  savedTimes.push(currentTime);
+  renderSavedTimes();
+  persistSavedTimes(); 
 }
 
-function verrouillerArreter() {
-  const verrouillage = document.getElementById("verrouillage");
-  const boutonArreter = document.getElementById("stop");
-  const boutonDemarrer = document.getElementById("start");
-
-  if (verrouillage.checked) {
-    boutonArreter.disabled = true;
-    boutonDemarrer.disabled = true;
+function applyLockState() {
+  if (lockCheckbox.checked) {
+    startButton.disabled = true;
+    stopButton.disabled = true;
+    resetButton.disabled = true;
   } else {
-    boutonArreter.disabled = false;
-    boutonDemarrer.disabled = false;
+    const confirmation = confirm("❗️ Dévérouiller ❓");
+    if (!confirmation) {
+      lockCheckbox.checked = true;
+      return;
+    }
+    stopButton.disabled = false;
   }
 }
 
-document.getElementById("start").addEventListener("click", demarrerChronometre);
-document.getElementById("stop").addEventListener("click", arreterChronometre);
-document
-  .getElementById("reset")
-  .addEventListener("click", reinitialiserChronometre);
-document
-  .getElementById("enregistrer")
-  .addEventListener("click", enregistrerTemps);
-document
-  .getElementById("verrouillage")
-  .addEventListener("change", verrouillerArreter);
+startButton.addEventListener("click", startTimer);
+stopButton.addEventListener("click", stopTimer);
+resetButton.addEventListener("click", resetTimer);
+lapButton.addEventListener("click", addSavedTime);
+lockCheckbox.addEventListener("change", applyLockState);
 
-function afficherTempsEnregistres() {
-  const listeTempsEnregistres = document.getElementById("temps-enregistres");
-  listeTempsEnregistres.innerHTML = ""; // Effacer la liste précédente
+function renderSavedTimes() {
+  const savedTimesList = document.getElementById("saved-times-list");
+  savedTimesList.innerHTML = "";
 
-  tempsEnregistres.forEach(function (temps, index) {
+  savedTimes.forEach(function (time, index) {
     const listItem = document.createElement("li");
-    listItem.textContent = `Tps ${index + 1} : ${temps}`;
-    listeTempsEnregistres.prepend(listItem);
+    listItem.textContent = `Tps ${index + 1} : ${time}`;
+    savedTimesList.prepend(listItem);
   });
 }
 
-// Fonction pour sauvegarder les temps enregistrés dans le localStorage
-function sauvegarderTempsEnregistres() {
-  localStorage.setItem("tempsEnregistres", JSON.stringify(tempsEnregistres));
-}
-// Fonction pour effacer les temps enregistrés dans le localStorage
-function effacerLocalStorage() {
-  localStorage.removeItem("tempsEnregistres");
+function persistSavedTimes() {
+  localStorage.setItem("savedTimes", JSON.stringify(savedTimes));
 }
 
-// Fonction pour charger les temps enregistrés depuis le localStorage
-function chargerTempsEnregistres() {
-  const tempsEnregistresString = localStorage.getItem("tempsEnregistres");
-  if (tempsEnregistresString) {
-    tempsEnregistres = JSON.parse(tempsEnregistresString);
-    afficherTempsEnregistres(); // Mettre à jour l'affichage
+function clearSavedTimesStorage() {
+  localStorage.removeItem("savedTimes");
+}
+
+function loadSavedTimes() {
+  const savedTimesString = localStorage.getItem("savedTimes");
+  if (savedTimesString) {
+    savedTimes = JSON.parse(savedTimesString);
+    renderSavedTimes();
   }
 }
 
-// Appeler la fonction pour charger les temps enregistrés au chargement de la page
-window.addEventListener("load", chargerTempsEnregistres);
+// Charge les temps enregistrés au chargement de la page
+window.addEventListener("load", loadSavedTimes);

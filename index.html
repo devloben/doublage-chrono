@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
@@ -127,13 +127,14 @@
 
   <body>
     <div class="container">
+      <!-- <div id="appVersion"></div> -->
       <div class="btn-container">
         <div class="lock">
-          <label for="verrouillage">Verrouillage</label>
-          <input type="checkbox" id="verrouillage" />
+          <label for="lock">Verrouillage</label>
+          <input type="checkbox" id="lock" />
         </div>
 
-        <div id="temps">00:00:00.00</div>
+        <div id="time">00:00:00.00</div>
 
         <button id="start">Start</button>
 
@@ -143,11 +144,9 @@
         </div>
       </div>
 
-      <ul id="temps-enregistres"></ul>
+      <ul id="saved-times-list"></ul>
 
-      <button id="enregistrer">Lap</button>
-
-      <div id="appVersion"></div>
+      <button id="lap">Lap</button>
     </div>
 
     <!-- SCRIPTS -->
