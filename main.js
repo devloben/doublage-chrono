@@ -17,7 +17,9 @@ const appVersion = "v-0.2";
 //   event.preventDefault();
 // });
 
-let timer; // Variable pour stocker l'identifiant du setInterval
+let timerIntervalId = null;
+let hasStarted = false;
+
 let hours = 0;
 let minutes = 0;
 let seconds = 0;
@@ -47,56 +49,61 @@ function renderTime() {
 
 function startTimer() {
   // Vérifie si le chronomètre est déjà en cours d'exécution
-  if (!timer) {
-    timer = setInterval(function () {
-      tenths++;
-      if (tenths === 100) {
-        tenths = 0;
-        seconds++;
-        if (seconds === 60) {
-          seconds = 0;
-          minutes++;
-          if (minutes === 60) {
-            minutes = 0;
-            hours++;
-          }
+  if (hasStarted) return;
+
+  hasStarted = true;
+  timerIntervalId = setInterval(() => {
+    tenths++;
+    if (tenths === 100) {
+      tenths = 0;
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
         }
       }
-      renderTime();
-    }, 10);
+    }
+    renderTime();
+  }, 10);
 
-    // Active la fonction lock et le bouton Lap
-    lockCheckbox.checked = true;
-    applyLockState();
-    lapButton.disabled = false;
-  }
+  // Active la fonction lock et le bouton Lap
+  lockCheckbox.checked = true;
+  applyLockState();
+  lapButton.disabled = false;
 }
 
 function stopTimer() {
-  clearInterval(timer);
+  clearInterval(timerIntervalId);
+  timerIntervalId = null;
 
   resetButton.disabled = false;
   stopButton.disabled = true;
 }
 
 function resetTimer() {
-  clearInterval(timer);
-  timer = null;
+  clearInterval(timerIntervalId);
+  timerIntervalId = null;
+  hasStarted = false;
+
   hours = 0;
   minutes = 0;
   seconds = 0;
   tenths = 0;
+
   renderTime();
 
-  resetButton.disabled = true;
-  stopButton.disabled = true;
-
   savedTimes = [];
-  renderSavedTimes(); 
-  clearSavedTimesStorage(); 
+  renderSavedTimes();
+  clearSavedTimesStorage();
 
-  startButton.disabled = false;
   lockCheckbox.disabled = false;
+  startButton.disabled = false;
+  stopButton.disabled = true;
+  resetButton.disabled = true;
+  lapButton.disabled = true;
 }
 
 function addSavedTime() {
@@ -107,7 +114,7 @@ function addSavedTime() {
     .padStart(2, "0")}`;
   savedTimes.push(currentTime);
   renderSavedTimes();
-  persistSavedTimes(); 
+  persistSavedTimes();
 }
 
 function applyLockState() {
