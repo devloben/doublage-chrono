@@ -12,10 +12,19 @@ if ("serviceWorker" in navigator && !isLocalhost) {
 const appVersion = "v-0.2";
 //document.getElementById("appVersion").innerText = appVersion;
 
-// window.addEventListener("beforeunload", (event) => {
-//   // Annuler le rechargement de la page
-//   event.preventDefault();
-// });
+function hasDataToProtect() {
+  return hasStarted || savedTimes.length > 0;
+}
+
+window.addEventListener("beforeunload", (event) => {
+  if (!hasDataToProtect()) {
+    return;
+  }
+
+  event.preventDefault();
+  // Compat navigateurs pour afficher l'alerte native beforeunload
+  event.returnValue = "";
+});
 
 let timerIntervalId = null;
 let hasStarted = false;
