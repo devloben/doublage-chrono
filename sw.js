@@ -1,4 +1,4 @@
-const CACHE_NAME = "doublageChrono-v0.4";
+const CACHE_NAME = "doublageChrono-v0.5";
 const APP_SHELL_FILES = [
   "./",
   "index.html",
@@ -32,6 +32,12 @@ const APP_SHELL_FILES = [
   "ressources/icons/android-icon-512x512.png",
   "ressources/img/screenshot.png",
 ];
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

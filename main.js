@@ -4,10 +4,42 @@ const isLocalhost =
   window.location.hostname === "localhost";
 
 if ("serviceWorker" in navigator && !isLocalhost) {
-  navigator.serviceWorker.register("sw.js").then(() => {
-    console.log("Service Worker enregistré");
+  navigator.serviceWorker.register("sw.js").then((registration) => {
+    if (registration.waiting) {
+      showUpdatePopup(registration);
+    }
+
+    registration.addEventListener("updatefound", () => {
+      const newWorker = registration.installing;
+
+      if (!newWorker) return;
+
+      newWorker.addEventListener("statechange", () => {
+        if (
+          newWorker.state === "installed" &&
+          navigator.serviceWorker.controller
+        ) {
+          showUpdatePopup(registration);
+        }
+      });
+    });
+  });
+
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    window.location.reload();
   });
 }
+
+function showUpdatePopup(registration) {
+  const shouldUpdate = confirm(
+    "Doublage Chrono a été mis à jour. Ouvrir la nouvelle version ?"
+  );
+
+  if (shouldUpdate) {
+    registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+  }
+}
+
 
 function hasDataToProtect() {
   return hasStarted || savedTimes.length > 0;
