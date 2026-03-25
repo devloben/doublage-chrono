@@ -8,12 +8,15 @@
 
 html,
 body {
-  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior-y: contain;
 }
 
 
 body {
-  min-height: 100dvh;
   font-family: Arial, Helvetica, sans-serif;
   background: #333;
 }
@@ -24,8 +27,9 @@ body {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 2fr 1fr;
+  grid-template-rows: auto 1fr auto;
   padding: 15px 8px 0px 8px;
+  overflow: hidden;
 }
 
 .btn-container {
