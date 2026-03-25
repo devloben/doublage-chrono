@@ -6,30 +6,20 @@
   padding: 0;
 }
 
-html,
 body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior-y: contain;
-}
-
-
-body {
+  height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
   background: #333;
 }
 
 .container {
   max-width: 430px;
-  min-height: 100dvh;
+  height: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr 2fr 1fr;
   padding: 15px 8px 0px 8px;
-  overflow: hidden;
 }
 
 .btn-container {
@@ -121,7 +111,7 @@ body {
 }
 
 #lap:active {
-  background: #eeff00;
+  background: #ffff00;
 }
 
 @media (orientation: landscape) {
