@@ -87,6 +87,7 @@ function stopTimer() {
 
   resetButton.disabled = false;
   stopButton.disabled = true;
+  lapButton.disabled = true
 }
 
 function resetTimer() {
@@ -141,7 +142,7 @@ function applyLockState() {
 startButton.addEventListener("click", startTimer);
 stopButton.addEventListener("click", stopTimer);
 resetButton.addEventListener("click", resetTimer);
-lapButton.addEventListener("click", addSavedTime);
+lapButton.addEventListener("pointerup", addSavedTime);
 lockCheckbox.addEventListener("change", applyLockState);
 
 function renderSavedTimes() {
