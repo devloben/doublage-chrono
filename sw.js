@@ -1,4 +1,4 @@
-const CACHE_NAME = "doublageChrono-v0.5.6";
+const CACHE_NAME = "doublageChrono-v0.5.7";
 const APP_SHELL_FILES = [
   "./",
   "index.html",
