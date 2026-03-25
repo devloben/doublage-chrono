@@ -40,7 +40,6 @@ function showUpdatePopup(registration) {
   }
 }
 
-
 function hasDataToProtect() {
   return hasStarted || savedTimes.length > 0;
 }
@@ -146,6 +145,9 @@ function resetTimer() {
 }
 
 function addSavedTime() {
+    if (timerIntervalId === null) {
+    return;
+  }
   const currentTime = `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
     .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${tenths
